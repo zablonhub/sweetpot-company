@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SweetPot – Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ════ LOGIN ════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-bee">🐝</div>
+    <h1>SweetPot Company</h1>
+    <p>Management System </p>
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button class="btn-login" onclick="doLogin()">Login</button>
+    <p class="login-hint">Default: Username / Password</p>
+    <p class="login-error" id="loginError"></p>
+  </div>
+</div>
+
+<!-- ════ APP ════ -->
+<div id="app">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-logo">🐝SweetPot Management System </div>
+    <div class="topbar-income">Total Income: <strong id="topIncome">Ksh 0.00</strong></div>
+    <button class="btn-logout" style="font-size:11px; padding: 6px 12px;" onclick="exportData()" title="Download data backup">💾 Backup</button>
+    <button class="btn-logout" style="font-size:11px; padding: 6px 12px;" onclick="importData()" title="Restore from backup">📂 Restore</button>
+    <button class="btn-logout" onclick="doLogout()">Log Out</button>
+  </div>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-label">Main</div>
+      <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')"> Dashboard</div>
+      <div class="sidebar-label">Records</div>
+      <div class="nav-item" data-page="farmers"   onclick="showPage('farmers')">Farmers</div>
+      <div class="nav-item" data-page="trainees"  onclick="showPage('trainees')"> Trainees</div>
+      <div class="nav-item" data-page="trainers"  onclick="showPage('trainers')"> Trainers</div>
+      <div class="sidebar-label">Transactions</div>
+      <div class="nav-item" data-page="sales"     onclick="showPage('sales')"> Product Sales</div>
+      <div class="nav-item" data-page="honey"     onclick="showPage('honey')"> Honey Purchases</div>
+      <div class="nav-item" data-page="transport" onclick="showPage('transport')"> Transport</div>
+      <div class="nav-item" data-page="trainings" onclick="showPage('trainings')"> Trainings</div>
+      <div class="sidebar-label">Reports</div>
+      <div class="nav-item" data-page="reports"   onclick="showPage('reports')"> Reports</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <div id="page-dashboard">
+        <div class="page-title">Welcome to SweetPot 🐝</div>
+        <div class="page-sub">SweetPot Company — Management Overview</div>
+        <div class="stat-grid" id="dashStats"></div>
+        <div class="grid2">
+          <div class="chart-container">
+            <div class="chart-title">📊 Income Sources</div>
+            <canvas id="incomeChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <div class="chart-title">👥 Organization Overview</div>
+            <canvas id="orgChart"></canvas>
+          </div>
+        </div>
+        <div class="grid2 mt16">
+          <div class="card">
+            <div class="card-header">📈 Recent Sales</div>
+            <div id="recentSales" style="padding:20px;"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">🍯 Recent Honey Purchases</div>
+            <div id="recentHoney" style="padding:20px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FARMERS ── -->
+      <div id="page-farmers" class="section-hidden">
+        <div class="page-title">Farmers</div>
+        <div class="page-sub">Registered bee farmers of SweetPot Company</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('farmers','list')">Farmers List</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('farmers','add')">+ Add New Farmer</div>
+        </div>
+        <div class="tab-panel active" id="farmers-list">
+          <div class="search-container">
+            <div class="search-bar">
+              <input type="text" id="farmerSearch" placeholder="Search by name, phone, or city..." onkeyup="searchAndRenderFarmers(this.value)">
+            </div>
+            <div class="search-actions">
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('farmers'), 'Farmers_List')">📥 CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('farmers'), 'Farmers List')">📄 PDF</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">All Farmers <span id="farmerCount" class="record-count"></span></div>
+            <table>
+              <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>City</th><th>Date Registered</th><th>Package</th><th>Actions</th></tr></thead>
+              <tbody id="farmersTbody"></tbody>
+            </table>
+            <div id="farmersPagination"></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="farmers-add">
+          <div class="card">
+            <div class="card-header">New Farmer Registration</div>
+            <div class="form-grid">
+              <div class="form-group"><label>First Name <span class="required">*</span></label><input id="f_first" placeholder="First name"></div>
+              <div class="form-group"><label>Last Name <span class="required">*</span></label><input id="f_last" placeholder="Last name"></div>
+              <div class="form-group"><label>Email</label><input id="f_email" type="email" placeholder="email@example.com"></div>
+              <div class="form-group"><label>Business Phone</label><input id="f_bphone" placeholder="e.g. 0712345678"></div>
+              <div class="form-group"><label>Mobile Phone</label><input id="f_mphone" placeholder="e.g. 0712345678"></div>
+              <div class="form-group"><label>City / Town</label><input id="f_city" placeholder="City or town"></div>
+              <div class="form-group"><label>Street / Address</label><input id="f_street" placeholder="Street address"></div>
+              <div class="form-group"><label>Package</label>
+                <select id="f_pkg">
+                  <option value="">— None —</option>
+                  <option value="Single Hive">Single Hive (Ksh 15,000)</option>
+                  <option value="Mini Package">Mini Package (Ksh 120,000)</option>
+                  <option value="Full Package">Full Package (Ksh 190,000)</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Date Registered</label><input id="f_date" type="date"></div>
+              <div class="form-group full"><label>Notes</label><textarea id="f_notes" placeholder="Any additional notes..."></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addFarmer()">Save Farmer</button>
+              <button class="btn btn-secondary" onclick="clearFarmerForm()">Clear Form</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TRAINEES ── -->
+      <div id="page-trainees" class="section-hidden">
+        <div class="page-title">Trainees</div>
+        <div class="page-sub">Farmers enrolled in beekeeping training programs</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('trainees','list')">Trainees List</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('trainees','add')">+ Add Trainee</div>
+        </div>
+        <div class="tab-panel active" id="trainees-list">
+          <div class="card">
+            <div class="card-header">All Trainees</div>
+            <table>
+              <thead><tr><th>ID</th><th>Full Name</th><th>Training ID</th><th>Date of Birth</th><th>Date Registered</th><th>Actions</th></tr></thead>
+              <tbody id="traineesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-panel" id="trainees-add">
+          <div class="card">
+            <div class="card-header">New Trainee Registration</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Full Name <span class="required">*</span></label><input id="tr_name" placeholder="Full name"></div>
+              <div class="form-group"><label>Training ID</label><input id="tr_tid" placeholder="e.g. TRN-001"></div>
+              <div class="form-group"><label>Date of Birth</label><input id="tr_dob" type="date"></div>
+              <div class="form-group"><label>Date Registered</label><input id="tr_date" type="date"></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addTrainee()"> Save Trainee</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TRAINERS ── -->
+      <div id="page-trainers" class="section-hidden">
+        <div class="page-title">Trainers</div>
+        <div class="page-sub">Beekeeping trainers and instructors</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('trainers','list')">Trainers List</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('trainers','add')">+ Add Trainer</div>
+        </div>
+        <div class="tab-panel active" id="trainers-list">
+          <div class="card">
+            <div class="card-header">All Trainers</div>
+            <table>
+              <thead><tr><th>ID</th><th>Name</th><th>Training Offered</th><th>Phone</th><th>Actions</th></tr></thead>
+              <tbody id="trainersTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-panel" id="trainers-add">
+          <div class="card">
+            <div class="card-header">New Trainer</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Trainer Name <span class="required">*</span></label><input id="trnr_name" placeholder="Full name"></div>
+              <div class="form-group"><label>Phone</label><input id="trnr_phone" placeholder="e.g. 0712345678"></div>
+              <div class="form-group full"><label>Training Offered</label><input id="trnr_training" placeholder="e.g. Honey Harvesting, Hive Management"></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addTrainer()">Save Trainer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PRODUCT SALES ── -->
+      <div id="page-sales" class="section-hidden">
+        <div class="page-title">Product Sales</div>
+        <div class="page-sub">Beehive packages and accessories sold to farmers</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('sales','list')">Sales List</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('sales','add')">+ New Sale</div>
+        </div>
+        <div class="tab-panel active" id="sales-list">
+          <div class="search-container">
+            <div class="search-bar">
+              <input type="text" id="salesSearch" placeholder="Search by customer or product type..." onkeyup="searchAndRenderSales(this.value)">
+            </div>
+            <div class="search-actions">
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('sales'), 'Sales_Report')">📥 CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('sales'), 'Sales Report')">📄 PDF</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">All Sales <span id="salesTotalBadge" class="record-count"></span></div>
+            <table>
+              <thead><tr><th>Sale ID</th><th>Customer</th><th>Type</th><th>Units</th><th>Unit Price</th><th>Sub-Total</th><th>Date</th><th>Transport</th><th>Actions</th></tr></thead>
+              <tbody id="salesTbody"></tbody>
+            </table>
+            <div id="salesPagination"></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="sales-add">
+          <div class="card">
+            <div class="card-header">New Sale / Order</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Customer Name <span class="required">*</span></label><input id="s_cust" placeholder="Customer full name"></div>
+              <div class="form-group"><label>Type of Sale <span class="required">*</span></label>
+                <select id="s_type" onchange="updateSalePrice()">
+                  <option value="">— Select —</option>
+                  <option value="Bee-hive (Single hive)">Bee-hive (Single hive)</option>
+                  <option value="Bee-hive (Mini package)">Bee-hive (Mini package)</option>
+                  <option value="Bee-hive (Full Package)">Bee-hive (Full Package)</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Honey Extractor">Honey Extractor</option>
+                  <option value="Harvesting Kit">Harvesting Kit</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Units / Packages</label><input id="s_units" type="number" min="1" value="1" oninput="calcSaleTotal()"></div>
+              <div class="form-group"><label>Unit Price (Ksh)</label><input id="s_price" type="number" placeholder="0" oninput="calcSaleTotal()"></div>
+              <div class="form-group"><label>Request Transportation?</label>
+                <select id="s_transport">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Date</label><input id="s_date" type="date"></div>
+              <div class="form-group full"><label>Sub-Total (Ksh)</label><input id="s_total" readonly placeholder="Auto-calculated"></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addSale()"> Save </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HONEY PURCHASES ── -->
+      <div id="page-honey" class="section-hidden">
+        <div class="page-title">Honey / Product Purchases</div>
+        <div class="page-sub">Honey purchased from farmers to the company</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('honey','list')">Purchases List</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('honey','add')">+ New Purchase</div>
+        </div>
+        <div class="tab-panel active" id="honey-list">
+          <div class="search-container">
+            <div class="search-bar">
+              <input type="text" id="honeySearch" placeholder="Search by supplier or honey type..." onkeyup="searchAndRenderHoney(this.value)">
+            </div>
+            <div class="search-actions">
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('honey'), 'Honey_Purchases')">📥 CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('honey'), 'Honey Purchases')">📄 PDF</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">All Honey Purchases <span id="honeyTotalBadge" class="record-count"></span></div>
+            <table>
+              <thead><tr><th>ID</th><th>Supplier</th><th>Type</th><th>Qty (KG)</th><th>Unit Price</th><th>Total</th><th>Date</th><th>Payment</th><th>Actions</th></tr></thead>
+              <tbody id="honeyTbody"></tbody>
+            </table>
+            <div id="honeyPagination"></div>
+          </div>
+        </div>
+        <div class="tab-panel" id="honey-add">
+          <div class="card">
+            <div class="card-header">New Honey Purchase</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Supplier (Farmer) <span class="required">*</span></label><input id="h_supplier" placeholder="Supplier name"></div>
+              <div class="form-group"><label>Purchase Type</label>
+                <select id="h_type" onchange="updateHoneyPrice()">
+                  <option value="Standard Honey">Standard Honey (Ksh 900/KG)</option>
+                  <option value="Premium Honey">Premium Honey (Ksh 1,200/KG)</option>
+                  <option value="Bee Products">Bee Products</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Quantity (KG)</label><input id="h_qty" type="number" min="1" value="1" oninput="calcHoneyTotal()"></div>
+              <div class="form-group"><label>Unit Price (Ksh)</label><input id="h_price" type="number" value="900" oninput="calcHoneyTotal()"></div>
+              <div class="form-group"><label>Total Amount (Ksh)</label><input id="h_total" readonly placeholder="Auto-calculated"></div>
+              <div class="form-group"><label>Date Received</label><input id="h_date" type="date"></div>
+              <div class="form-group"><label>Payment Method</label>
+                <select id="h_payment">
+                  <option>Cash</option>
+                  <option>M-Pesa</option>
+                  <option>Bank Transfer</option>
+                  <option>Cheque</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Bank Name (optional)</label><input id="h_bank" placeholder="Bank name if applicable"></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addHoney()">Save </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TRANSPORT ── -->
+      <div id="page-transport" class="section-hidden">
+        <div class="page-title">Transport</div>
+        <div class="page-sub">Transportation services and earnings</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('transport','list')">Transport Records</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('transport','add')">+ New Transport</div>
+        </div>
+        <div class="tab-panel active" id="transport-list">
+          <div class="card">
+            <div class="card-header">Transport Records <span id="transportTotalBadge" class="record-count"></span></div>
+            <table>
+              <thead><tr><th>ID</th><th>Service Type</th><th>Qty / KM</th><th>Rate (Ksh)</th><th>Total Cost</th><th>Date</th><th>Notes</th><th>Actions</th></tr></thead>
+              <tbody id="transportTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-panel" id="transport-add">
+          <div class="card">
+            <div class="card-header">New Transport Entry</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Service Type <span class="required">*</span></label>
+                <select id="tp_item" onchange="updateTransportRate()">
+                  <option value="Single">Single (Ksh 2,000/package)</option>
+                  <option value="Mini Package">Mini Package (Ksh 20/km)</option>
+                  <option value="Full Package">Full Package (Ksh 25/km)</option>
+                  <option value="Accessories">Accessories (Ksh 30/item)</option>
+                  <option value="Harvesting Kit">Harvesting Kit (Ksh 30/item)</option>
+                  <option value="Honey Extractor">Honey Extractor (Ksh 100/item)</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Qty / KM / Packages</label><input id="tp_qty" type="number" min="1" value="1" oninput="calcTransportTotal()"></div>
+              <div class="form-group"><label>Rate (Ksh)</label><input id="tp_rate" type="number" value="2000" oninput="calcTransportTotal()"></div>
+              <div class="form-group"><label>Total Cost (Ksh)</label><input id="tp_total" readonly placeholder="Auto-calculated"></div>
+              <div class="form-group"><label>Date</label><input id="tp_date" type="date"></div>
+              <div class="form-group"><label>Notes</label><input id="tp_notes" placeholder="Optional notes"></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addTransport()"> Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TRAININGS ── -->
+      <div id="page-trainings" class="section-hidden">
+        <div class="page-title">Training Schedules</div>
+        <div class="page-sub">Beekeeping training sessions</div>
+        <div class="tabs">
+          <div class="tab active" data-panel="list" onclick="switchTab('trainings','list')">All Trainings</div>
+          <div class="tab"        data-panel="add"  onclick="switchTab('trainings','add')">+ New Training</div>
+        </div>
+        <div class="tab-panel active" id="trainings-list">
+          <div class="card">
+            <div class="card-header">Training Records <span id="trainingIncomeBadge" class="record-count"></span></div>
+            <table>
+              <thead><tr><th>ID</th><th>Trainee</th><th>Trainer</th><th>Booking Date</th><th>Training Date</th><th>Amount (Ksh)</th><th>Package</th><th>Actions</th></tr></thead>
+              <tbody id="trainingsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="tab-panel" id="trainings-add">
+          <div class="card">
+            <div class="card-header">New Training Session</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Trainee Name <span class="required">*</span></label><input id="tng_trainee" placeholder="Trainee full name"></div>
+              <div class="form-group"><label>Trainer Name <span class="required">*</span></label><input id="tng_trainer" placeholder="Trainer full name"></div>
+              <div class="form-group"><label>Booking Date</label><input id="tng_booking" type="date"></div>
+              <div class="form-group"><label>Training Date</label><input id="tng_date" type="date"></div>
+              <div class="form-group"><label>Amount Paid (Ksh)</label><input id="tng_amount" type="number" placeholder="0" min="0"></div>
+              <div class="form-group"><label>Package / Notes</label><input id="tng_pkg" placeholder="e.g. Package Inclusive (010)"></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" onclick="addTraining()"> Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── REPORTS ── -->
+      <div id="page-reports" class="section-hidden">
+        <div class="page-title">Reports</div>
+        <div class="page-sub">Company income and activity reports</div>
+        <div class="grid2 mb16">
+          <div class="chart-container">
+            <div class="chart-title">💰 Monthly Income Trend</div>
+            <canvas id="monthlyIncomeChart"></canvas>
+          </div>
+          <div class="chart-container">
+            <div class="chart-title">📦 Sales by Category</div>
+            <canvas id="salesCategoryChart"></canvas>
+          </div>
+        </div>
+        <div class="card mb16">
+          <div class="card-header">Monthly Company Income Report</div>
+          <table>
+            <thead><tr><th>Month</th><th>Product Sales</th><th>Sales to Clients</th><th>Training Income</th><th>Transport Earnings</th><th>Honey Purchases</th><th>Total Income</th></tr></thead>
+            <tbody id="incomeReportTbody"></tbody>
+            <tfoot id="incomeReportFoot"></tfoot>
+          </table>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-header">👨‍🌾 Company Farmers Report</div>
+            <table>
+              <thead><tr><th>Farmer ID</th><th>Name</th><th>City</th><th>Phone</th></tr></thead>
+              <tbody id="farmerReportTbody"></tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-header">📊 Products Sales Report</div>
+            <table>
+              <thead><tr><th>Sale ID</th><th>Sold To</th><th>Type</th><th>Units</th><th>Total</th></tr></thead>
+              <tbody id="salesReportTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end layout -->
+</div><!-- end app -->
+
+<!-- ════ TOAST ════ -->
+<div id="toast"></div>
+
+<!-- ════ CONFIRM DELETE MODAL ════ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" style="width:380px;">
+    <div class="modal-header"> Confirm Delete <button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="confirm-msg" id="confirmMsg">Are you sure you want to delete this record?</div>
+      <div class="confirm-sub">This action cannot be undone.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="confirmBtn">Yes, Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('confirmModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT FARMER MODAL ════ -->
+<div class="modal-overlay" id="editFarmerModal">
+  <div class="modal">
+    <div class="modal-header"> Edit Farmer <button class="modal-close" onclick="closeModal('editFarmerModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="ef_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>First Name *</label><input id="ef_first"></div>
+        <div class="form-group"><label>Last Name *</label><input id="ef_last"></div>
+        <div class="form-group"><label>Email</label><input id="ef_email" type="email"></div>
+        <div class="form-group"><label>Business Phone</label><input id="ef_bphone"></div>
+        <div class="form-group"><label>Mobile Phone</label><input id="ef_mphone"></div>
+        <div class="form-group"><label>City</label><input id="ef_city"></div>
+        <div class="form-group"><label>Street / Address</label><input id="ef_street"></div>
+        <div class="form-group"><label>Package</label>
+          <select id="ef_pkg">
+            <option value="">— None —</option>
+            <option value="Single Hive">Single Hive</option>
+            <option value="Mini Package">Mini Package</option>
+            <option value="Full Package">Full Package</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Date Registered</label><input id="ef_date" type="date"></div>
+        <div class="form-group full"><label>Notes</label><textarea id="ef_notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditFarmer()">Save</button>
+      <button class="btn btn-secondary" onclick="closeModal('editFarmerModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT TRAINEE MODAL ════ -->
+<div class="modal-overlay" id="editTraineeModal">
+  <div class="modal">
+    <div class="modal-header"> Edit Trainee <button class="modal-close" onclick="closeModal('editTraineeModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="etr_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>Full Name *</label><input id="etr_name"></div>
+        <div class="form-group"><label>Training ID</label><input id="etr_tid"></div>
+        <div class="form-group"><label>Date of Birth</label><input id="etr_dob" type="date"></div>
+        <div class="form-group"><label>Date Registered</label><input id="etr_date" type="date"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditTrainee()">Save</button>
+      <button class="btn btn-secondary" onclick="closeModal('editTraineeModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT TRAINER MODAL ════ -->
+<div class="modal-overlay" id="editTrainerModal">
+  <div class="modal">
+    <div class="modal-header"> Edit Trainer <button class="modal-close" onclick="closeModal('editTrainerModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="etrnr_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>Trainer Name *</label><input id="etrnr_name"></div>
+        <div class="form-group"><label>Phone</label><input id="etrnr_phone"></div>
+        <div class="form-group full"><label>Training Offered</label><input id="etrnr_training"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditTrainer()"> Save</button>
+      <button class="btn btn-secondary" onclick="closeModal('editTrainerModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT SALE MODAL ════ -->
+<div class="modal-overlay" id="editSaleModal">
+  <div class="modal">
+    <div class="modal-header">Edit Sale <button class="modal-close" onclick="closeModal('editSaleModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="es_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>Customer Name *</label><input id="es_cust"></div>
+        <div class="form-group"><label>Type of Sale</label>
+          <select id="es_type">
+            <option value="Bee-hive (Single hive)">Bee-hive (Single hive)</option>
+            <option value="Bee-hive (Mini package)">Bee-hive (Mini package)</option>
+            <option value="Bee-hive (Full Package)">Bee-hive (Full Package)</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Honey Extractor">Honey Extractor</option>
+            <option value="Harvesting Kit">Harvesting Kit</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Units</label><input id="es_units" type="number" min="1" oninput="calcEditSaleTotal()"></div>
+        <div class="form-group"><label>Unit Price (Ksh)</label><input id="es_price" type="number" oninput="calcEditSaleTotal()"></div>
+        <div class="form-group"><label>Transport</label>
+          <select id="es_transport"><option value="No">No</option><option value="Yes">Yes</option></select>
+        </div>
+        <div class="form-group"><label>Date</label><input id="es_date" type="date"></div>
+        <div class="form-group full"><label>Sub-Total (Ksh)</label><input id="es_total" readonly></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditSale()"> Save Changes</button>
+      <button class="btn btn-secondary" onclick="closeModal('editSaleModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT HONEY MODAL ════ -->
+<div class="modal-overlay" id="editHoneyModal">
+  <div class="modal">
+    <div class="modal-header"> Edit Honey Purchase <button class="modal-close" onclick="closeModal('editHoneyModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="eh_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>Supplier *</label><input id="eh_supplier"></div>
+        <div class="form-group"><label>Purchase Type</label>
+          <select id="eh_type">
+            <option value="Standard Honey">Standard Honey</option>
+            <option value="Premium Honey">Premium Honey</option>
+            <option value="Bee Products">Bee Products</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Quantity (KG)</label><input id="eh_qty" type="number" min="1" oninput="calcEditHoneyTotal()"></div>
+        <div class="form-group"><label>Unit Price (Ksh)</label><input id="eh_price" type="number" oninput="calcEditHoneyTotal()"></div>
+        <div class="form-group"><label>Total (Ksh)</label><input id="eh_total" readonly></div>
+        <div class="form-group"><label>Date</label><input id="eh_date" type="date"></div>
+        <div class="form-group"><label>Payment Method</label>
+          <select id="eh_payment"><option>Cash</option><option>M-Pesa</option><option>Bank Transfer</option><option>Cheque</option></select>
+        </div>
+        <div class="form-group"><label>Bank Name</label><input id="eh_bank"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditHoney()"> Save Changes</button>
+      <button class="btn btn-secondary" onclick="closeModal('editHoneyModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT TRANSPORT MODAL ════ -->
+<div class="modal-overlay" id="editTransportModal">
+  <div class="modal">
+    <div class="modal-header"> Edit Transport <button class="modal-close" onclick="closeModal('editTransportModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="etp_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>Service Type *</label>
+          <select id="etp_item">
+            <option value="Single">Single</option>
+            <option value="Mini Package">Mini Package</option>
+            <option value="Full Package">Full Package</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Harvesting Kit">Harvesting Kit</option>
+            <option value="Honey Extractor">Honey Extractor</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Qty / KM</label><input id="etp_qty" type="number" min="1" oninput="calcEditTransportTotal()"></div>
+        <div class="form-group"><label>Rate (Ksh)</label><input id="etp_rate" type="number" oninput="calcEditTransportTotal()"></div>
+        <div class="form-group"><label>Total (Ksh)</label><input id="etp_total" readonly></div>
+        <div class="form-group"><label>Date</label><input id="etp_date" type="date"></div>
+        <div class="form-group"><label>Notes</label><input id="etp_notes"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditTransport()"> Save Changes</button>
+      <button class="btn btn-secondary" onclick="closeModal('editTransportModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT TRAINING MODAL ════ -->
+<div class="modal-overlay" id="editTrainingModal">
+  <div class="modal">
+    <div class="modal-header"> Edit Training Session <button class="modal-close" onclick="closeModal('editTrainingModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="etng_id">
+      <div class="form-grid" style="padding:0;">
+        <div class="form-group"><label>Trainee *</label><input id="etng_trainee"></div>
+        <div class="form-group"><label>Trainer *</label><input id="etng_trainer"></div>
+        <div class="form-group"><label>Booking Date</label><input id="etng_booking" type="date"></div>
+        <div class="form-group"><label>Training Date</label><input id="etng_date" type="date"></div>
+        <div class="form-group"><label>Amount Paid (Ksh)</label><input id="etng_amount" type="number" min="0"></div>
+        <div class="form-group"><label>Package / Notes</label><input id="etng_pkg"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEditTraining()"> Save Changes</button>
+      <button class="btn btn-secondary" onclick="closeModal('editTrainingModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
