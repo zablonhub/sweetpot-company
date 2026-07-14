@@ -21,14 +21,21 @@ const DB = {
       return true;
     } catch (e) {
       console.error('Error writing to localStorage:', e);
-      toast('⚠️ Could not save data. Check browser storage settings.', true);
+      toast(' Could not save data. Check browser storage settings.', true);
       return false;
     }
   },
   
   nextId: (key) => {
     const items = DB.get(key);
-    return items.length === 0 ? 1 : Math.max(...items.map(i => i.id)) + 1;
+    const numericIds = items.map(i => Number(i.id)).filter(Number.isFinite);
+    if (numericIds.length === 0) return 1;
+
+    let nextId = Math.max(...numericIds) + 1;
+    while (items.some(i => Number(i.id) === nextId)) {
+      nextId += 1;
+    }
+    return nextId;
   },
   
   // Verify data integrity and persistence
@@ -44,6 +51,173 @@ const DB = {
     }
   }
 };
+
+const sampleFarmers = [
+  { id: 1, first: 'James', last: 'Wanjiku', name: 'James Wanjiku', email: 'james.wanjiku@gmail.com', bphone: '+254712345678', mphone: '0712345678', city: 'Nakuru', street: 'Kikuyu Road', package: 'Starter', date: '2024-01-12', notes: 'Prefers weekly collection', createdAt: '2024-01-12T08:00:00.000Z' },
+  { id: 2, first: 'Mary', last: 'Njeri', name: 'Mary Njeri', email: 'mary.njeri@yahoo.com', bphone: '+254723456789', mphone: '0723456789', city: 'Kisii', street: 'Kisii Main Street', package: 'Premium', date: '2024-01-15', notes: 'Requests fast delivery', createdAt: '2024-01-15T09:15:00.000Z' },
+  { id: 3, first: 'Daniel', last: 'Kiptoo', name: 'Daniel Kiptoo', email: 'daniel.kiptoo@outlook.com', bphone: '+254734567890', mphone: '0734567890', city: 'Eldoret', street: 'Kapsabet Road', package: 'Enterprise', date: '2024-02-03', notes: 'Handles large volume', createdAt: '2024-02-03T10:30:00.000Z' },
+  { id: 4, first: 'Grace', last: 'Akinyi', name: 'Grace Akinyi', email: 'grace.akinyi@gmail.com', bphone: '+254745678901', mphone: '0745678901', city: 'Mombasa', street: 'Likoni Road', package: 'Starter', date: '2024-02-10', notes: 'Needs monthly invoice', createdAt: '2024-02-10T11:00:00.000Z' },
+  { id: 5, first: 'Peter', last: 'Mugo', name: 'Peter Mugo', email: 'peter.mugo@gmail.com', bphone: '+254756789012', mphone: '0756789012', city: 'Nyeri', street: 'Kenyatta Avenue', package: 'Premium', date: '2024-03-05', notes: 'Interested in training support', createdAt: '2024-03-05T08:45:00.000Z' },
+  { id: 6, first: 'Lucy', last: 'Wangare', name: 'Lucy Wangare', email: 'lucy.wangare@yahoo.com', bphone: '+254767890123', mphone: '0767890123', city: 'Kericho', street: 'Tea Factory Road', package: 'Starter', date: '2024-03-11', notes: 'Prefers cash payment', createdAt: '2024-03-11T09:20:00.000Z' },
+  { id: 7, first: 'Brian', last: 'Odhiambo', name: 'Brian Odhiambo', email: 'brian.odhiambo@gmail.com', bphone: '+254778901234', mphone: '0778901234', city: 'Kakamega', street: 'Mumias Road', package: 'Enterprise', date: '2024-03-20', notes: 'Active during harvest season', createdAt: '2024-03-20T12:05:00.000Z' },
+  { id: 8, first: 'Anne', last: 'Kariuki', name: 'Anne Kariuki', email: 'anne.kariuki@outlook.com', bphone: '+254789012345', mphone: '0789012345', city: 'Nairobi', street: 'Westlands Road', package: 'Premium', date: '2024-04-02', notes: 'Understands modern apiary methods', createdAt: '2024-04-02T07:30:00.000Z' },
+  { id: 9, first: 'Kevin', last: 'Mutua', name: 'Kevin Mutua', email: 'kevin.mutua@gmail.com', bphone: '+254790123456', mphone: '0790123456', city: 'Machakos', street: 'Mumbuni Road', package: 'Starter', date: '2024-04-17', notes: 'Needs transport coordination', createdAt: '2024-04-17T10:10:00.000Z' },
+  { id: 10, first: 'Ruth', last: 'Muthoni', name: 'Ruth Muthoni', email: 'ruth.muthoni@yahoo.com', bphone: '+254701234567', mphone: '0701234567', city: 'Murang\'a', street: 'Kangema Road', package: 'Premium', date: '2024-05-01', notes: 'Interested in premium products', createdAt: '2024-05-01T08:20:00.000Z' },
+  { id: 11, first: 'Charles', last: 'Ochieng', name: 'Charles Ochieng', email: 'charles.ochieng@gmail.com', bphone: '+254711234567', mphone: '0711234567', city: 'Kisumu', street: 'Milimani Road', package: 'Enterprise', date: '2024-05-08', notes: 'Large export order', createdAt: '2024-05-08T09:50:00.000Z' },
+  { id: 12, first: 'Susan', last: 'Muli', name: 'Susan Muli', email: 'susan.muli@outlook.com', bphone: '+254721234567', mphone: '0721234567', city: 'Kitui', street: 'Kitui Town Road', package: 'Starter', date: '2024-05-19', notes: 'Prefers monthly updates', createdAt: '2024-05-19T11:35:00.000Z' },
+  { id: 13, first: 'Eric', last: 'Ndegwa', name: 'Eric Ndegwa', email: 'eric.ndegwa@yahoo.com', bphone: '+254731234567', mphone: '0731234567', city: 'Thika', street: 'Kamwangi Road', package: 'Premium', date: '2024-06-04', notes: 'Interested in product bundles', createdAt: '2024-06-04T10:00:00.000Z' },
+  { id: 14, first: 'Hellen', last: 'Mwaniki', name: 'Hellen Mwaniki', email: 'hellen.mwaniki@gmail.com', bphone: '+254741234567', mphone: '0741234567', city: 'Kiambu', street: 'Ruiru Road', package: 'Starter', date: '2024-06-11', notes: 'Needs field support', createdAt: '2024-06-11T08:10:00.000Z' },
+  { id: 15, first: 'Noah', last: 'Kimutai', name: 'Noah Kimutai', email: 'noah.kimutai@gmail.com', bphone: '+254751234567', mphone: '0751234567', city: 'Bomet', street: 'Longisa Road', package: 'Enterprise', date: '2024-06-20', notes: 'Works with cooperative groups', createdAt: '2024-06-20T09:45:00.000Z' },
+  { id: 16, first: 'Cynthia', last: 'Kiprop', name: 'Cynthia Kiprop', email: 'cynthia.kiprop@yahoo.com', bphone: '+254761234567', mphone: '0761234567', city: 'Narok', street: 'Mara Road', package: 'Premium', date: '2024-07-01', notes: 'Requests regular stock updates', createdAt: '2024-07-01T07:55:00.000Z' }
+];
+
+const sampleTrainees = [
+  { id: 1, name: 'Faith Nyambura', tid: 'TRN-001', dob: '1993-04-12', date: '2024-01-08' },
+  { id: 2, name: 'Samson Otieno', tid: 'TRN-002', dob: '1991-09-22', date: '2024-01-10' },
+  { id: 3, name: 'Vivian Chepkorir', tid: 'TRN-003', dob: '1995-03-18', date: '2024-01-15' },
+  { id: 4, name: 'Morris Wekesa', tid: 'TRN-004', dob: '1990-12-05', date: '2024-01-20' },
+  { id: 5, name: 'Sharon Atieno', tid: 'TRN-005', dob: '1994-07-19', date: '2024-02-02' },
+  { id: 6, name: 'David Mwangi', tid: 'TRN-006', dob: '1992-11-14', date: '2024-02-08' },
+  { id: 7, name: 'Linet Achieng', tid: 'TRN-007', dob: '1996-02-07', date: '2024-02-14' },
+  { id: 8, name: 'Emmanuel Kibet', tid: 'TRN-008', dob: '1989-10-27', date: '2024-03-01' },
+  { id: 9, name: 'Miriam Wambui', tid: 'TRN-009', dob: '1993-06-11', date: '2024-03-09' },
+  { id: 10, name: 'Isaac Omondi', tid: 'TRN-010', dob: '1991-08-30', date: '2024-03-16' },
+  { id: 11, name: 'Esther Kilonzo', tid: 'TRN-011', dob: '1997-01-04', date: '2024-03-22' },
+  { id: 12, name: 'George Kamau', tid: 'TRN-012', dob: '1988-05-17', date: '2024-04-03' },
+  { id: 13, name: 'Diana Naliaka', tid: 'TRN-013', dob: '1994-09-09', date: '2024-04-12' },
+  { id: 14, name: 'Nixon Barasa', tid: 'TRN-014', dob: '1992-12-21', date: '2024-04-25' },
+  { id: 15, name: 'Caroline Oduor', tid: 'TRN-015', dob: '1995-02-26', date: '2024-05-06' },
+  { id: 16, name: 'Brian Mutiso', tid: 'TRN-016', dob: '1990-07-15', date: '2024-05-14' }
+];
+
+const sampleTrainers = [
+  { id: 1, name: 'Joseph Mburu', training: 'Modern Beekeeping', phone: '0711000001' },
+  { id: 2, name: 'Catherine Langat', training: 'Honey Processing', phone: '0711000002' },
+  { id: 3, name: 'Pauline Anyango', training: 'Apiary Business Management', phone: '0711000003' },
+  { id: 4, name: 'Meshack Njoroge', training: 'Hive Maintenance', phone: '0711000004' },
+  { id: 5, name: 'Rosemary Mumo', training: 'Quality Control', phone: '0711000005' },
+  { id: 6, name: 'Kevin Cheruiyot', training: 'Harvest Planning', phone: '0711000006' },
+  { id: 7, name: 'Naomi Kiarie', training: 'Marketing & Sales', phone: '0711000007' },
+  { id: 8, name: 'Simon Kiplagat', training: 'Hive Installation', phone: '0711000008' }
+];
+
+const sampleSales = [
+  { id: 1, customer: 'James Wanjiku', saleType: 'Bee-hive (Single hive)', package: 'Bee-hive (Single hive)', units: 4, unitPrice: 15000, total: 60000, transport: 'Yes', date: '2024-01-12', createdAt: '2024-01-12T08:00:00.000Z' },
+  { id: 2, customer: 'Mary Njeri', saleType: 'Bee-hive (Mini package)', package: 'Bee-hive (Mini package)', units: 2, unitPrice: 120000, total: 240000, transport: 'Yes', date: '2024-01-18', createdAt: '2024-01-18T09:00:00.000Z' },
+  { id: 3, customer: 'Daniel Kiptoo', saleType: 'Full Package', package: 'Full Package', units: 3, unitPrice: 190000, total: 570000, transport: 'No', date: '2024-02-05', createdAt: '2024-02-05T10:10:00.000Z' },
+  { id: 4, customer: 'Grace Akinyi', saleType: 'Accessories', package: 'Accessories', units: 12, unitPrice: 500, total: 6000, transport: 'No', date: '2024-02-14', createdAt: '2024-02-14T11:20:00.000Z' },
+  { id: 5, customer: 'Peter Mugo', saleType: 'Harvesting Kit', package: 'Harvesting Kit', units: 5, unitPrice: 3500, total: 17500, transport: 'Yes', date: '2024-02-22', createdAt: '2024-02-22T12:40:00.000Z' },
+  { id: 6, customer: 'Lucy Wangare', saleType: 'Honey Extractor', package: 'Honey Extractor', units: 1, unitPrice: 8000, total: 8000, transport: 'No', date: '2024-03-01', createdAt: '2024-03-01T09:20:00.000Z' },
+  { id: 7, customer: 'Brian Odhiambo', saleType: 'Bee-hive (Single hive)', package: 'Bee-hive (Single hive)', units: 8, unitPrice: 15000, total: 120000, transport: 'Yes', date: '2024-03-09', createdAt: '2024-03-09T07:55:00.000Z' },
+  { id: 8, customer: 'Anne Kariuki', saleType: 'Bee-hive (Mini package)', package: 'Bee-hive (Mini package)', units: 3, unitPrice: 120000, total: 360000, transport: 'Yes', date: '2024-03-15', createdAt: '2024-03-15T10:05:00.000Z' },
+  { id: 9, customer: 'Kevin Mutua', saleType: 'Accessories', package: 'Accessories', units: 20, unitPrice: 500, total: 10000, transport: 'No', date: '2024-03-24', createdAt: '2024-03-24T08:15:00.000Z' },
+  { id: 10, customer: 'Ruth Muthoni', saleType: 'Harvesting Kit', package: 'Harvesting Kit', units: 7, unitPrice: 3500, total: 24500, transport: 'Yes', date: '2024-04-02', createdAt: '2024-04-02T11:25:00.000Z' },
+  { id: 11, customer: 'Charles Ochieng', saleType: 'Bee-hive (Full Package)', package: 'Bee-hive (Full Package)', units: 5, unitPrice: 190000, total: 950000, transport: 'Yes', date: '2024-04-10', createdAt: '2024-04-10T09:10:00.000Z' },
+  { id: 12, customer: 'Susan Muli', saleType: 'Honey Extractor', package: 'Honey Extractor', units: 2, unitPrice: 8000, total: 16000, transport: 'No', date: '2024-04-16', createdAt: '2024-04-16T10:30:00.000Z' },
+  { id: 13, customer: 'Eric Ndegwa', saleType: 'Bee-hive (Single hive)', package: 'Bee-hive (Single hive)', units: 6, unitPrice: 15000, total: 90000, transport: 'Yes', date: '2024-05-03', createdAt: '2024-05-03T12:05:00.000Z' },
+  { id: 14, customer: 'Hellen Mwaniki', saleType: 'Accessories', package: 'Accessories', units: 15, unitPrice: 500, total: 7500, transport: 'No', date: '2024-05-11', createdAt: '2024-05-11T08:23:00.000Z' },
+  { id: 15, customer: 'Noah Kimutai', saleType: 'Bee-hive (Mini package)', package: 'Bee-hive (Mini package)', units: 4, unitPrice: 120000, total: 480000, transport: 'Yes', date: '2024-05-22', createdAt: '2024-05-22T10:45:00.000Z' },
+  { id: 16, customer: 'Cynthia Kiprop', saleType: 'Harvesting Kit', package: 'Harvesting Kit', units: 3, unitPrice: 3500, total: 10500, transport: 'No', date: '2024-05-29', createdAt: '2024-05-29T09:35:00.000Z' },
+  { id: 17, customer: 'James Wanjiku', saleType: 'Bee-hive (Full Package)', package: 'Bee-hive (Full Package)', units: 2, unitPrice: 190000, total: 380000, transport: 'Yes', date: '2024-06-08', createdAt: '2024-06-08T07:40:00.000Z' },
+  { id: 18, customer: 'Mary Njeri', saleType: 'Accessories', package: 'Accessories', units: 10, unitPrice: 500, total: 5000, transport: 'No', date: '2024-06-19', createdAt: '2024-06-19T08:55:00.000Z' },
+  { id: 19, customer: 'Daniel Kiptoo', saleType: 'Honey Extractor', package: 'Honey Extractor', units: 1, unitPrice: 8000, total: 8000, transport: 'Yes', date: '2024-06-25', createdAt: '2024-06-25T12:20:00.000Z' },
+  { id: 20, customer: 'Grace Akinyi', saleType: 'Bee-hive (Single hive)', package: 'Bee-hive (Single hive)', units: 5, unitPrice: 15000, total: 75000, transport: 'No', date: '2024-07-03', createdAt: '2024-07-03T11:35:00.000Z' },
+  { id: 21, customer: 'Peter Mugo', saleType: 'Bee-hive (Mini package)', package: 'Bee-hive (Mini package)', units: 2, unitPrice: 120000, total: 240000, transport: 'Yes', date: '2024-07-11', createdAt: '2024-07-11T10:50:00.000Z' },
+  { id: 22, customer: 'Lucy Wangare', saleType: 'Full Package', package: 'Full Package', units: 1, unitPrice: 190000, total: 190000, transport: 'No', date: '2024-07-18', createdAt: '2024-07-18T09:25:00.000Z' }
+];
+
+const sampleHoney = [
+  { id: 1, supplier: 'Moses Karanja', honeyType: 'Premium Honey', qty: 35, unitPrice: 1200, total: 42000, date: '2024-01-14', payment: 'Bank', bank: 'Co-op Bank', createdAt: '2024-01-14T09:20:00.000Z' },
+  { id: 2, supplier: 'Jane Wairimu', honeyType: 'Standard Honey', qty: 22, unitPrice: 900, total: 19800, date: '2024-01-20', payment: 'Cash', bank: '', createdAt: '2024-01-20T10:35:00.000Z' },
+  { id: 3, supplier: 'Stephen Mwakio', honeyType: 'Premium Honey', qty: 40, unitPrice: 1200, total: 48000, date: '2024-02-01', payment: 'Bank', bank: 'KCB', createdAt: '2024-02-01T08:10:00.000Z' },
+  { id: 4, supplier: 'Asha Binti', honeyType: 'Standard Honey', qty: 18, unitPrice: 900, total: 16200, date: '2024-02-09', payment: 'Cash', bank: '', createdAt: '2024-02-09T07:45:00.000Z' },
+  { id: 5, supplier: 'Njuguna Mugo', honeyType: 'Premium Honey', qty: 27, unitPrice: 1200, total: 32400, date: '2024-02-16', payment: 'Bank', bank: 'Equity', createdAt: '2024-02-16T11:50:00.000Z' },
+  { id: 6, supplier: 'Catherine Awuor', honeyType: 'Standard Honey', qty: 24, unitPrice: 900, total: 21600, date: '2024-03-02', payment: 'Cash', bank: '', createdAt: '2024-03-02T09:15:00.000Z' },
+  { id: 7, supplier: 'Daniel Nyaga', honeyType: 'Premium Honey', qty: 31, unitPrice: 1200, total: 37200, date: '2024-03-10', payment: 'Bank', bank: 'NCBA', createdAt: '2024-03-10T12:25:00.000Z' },
+  { id: 8, supplier: 'Lydia Kiplagat', honeyType: 'Standard Honey', qty: 20, unitPrice: 900, total: 18000, date: '2024-03-18', payment: 'Cash', bank: '', createdAt: '2024-03-18T08:50:00.000Z' },
+  { id: 9, supplier: 'Benson Ouma', honeyType: 'Premium Honey', qty: 45, unitPrice: 1200, total: 54000, date: '2024-03-29', payment: 'Bank', bank: 'Co-op Bank', createdAt: '2024-03-29T10:20:00.000Z' },
+  { id: 10, supplier: 'Hilda Muthoni', honeyType: 'Standard Honey', qty: 19, unitPrice: 900, total: 17100, date: '2024-04-06', payment: 'Cash', bank: '', createdAt: '2024-04-06T07:30:00.000Z' },
+  { id: 11, supplier: 'Omondi Otieno', honeyType: 'Premium Honey', qty: 28, unitPrice: 1200, total: 33600, date: '2024-04-12', payment: 'Bank', bank: 'KCB', createdAt: '2024-04-12T11:40:00.000Z' },
+  { id: 12, supplier: 'Purity Kinya', honeyType: 'Standard Honey', qty: 21, unitPrice: 900, total: 18900, date: '2024-04-24', payment: 'Cash', bank: '', createdAt: '2024-04-24T09:05:00.000Z' },
+  { id: 13, supplier: 'Kennedy Njoroge', honeyType: 'Premium Honey', qty: 36, unitPrice: 1200, total: 43200, date: '2024-05-04', payment: 'Bank', bank: 'Equity', createdAt: '2024-05-04T08:22:00.000Z' },
+  { id: 14, supplier: 'Miriam Korir', honeyType: 'Standard Honey', qty: 25, unitPrice: 900, total: 22500, date: '2024-05-16', payment: 'Cash', bank: '', createdAt: '2024-05-16T10:15:00.000Z' },
+  { id: 15, supplier: 'Caleb Kamau', honeyType: 'Premium Honey', qty: 29, unitPrice: 1200, total: 34800, date: '2024-05-28', payment: 'Bank', bank: 'NCBA', createdAt: '2024-05-28T09:55:00.000Z' },
+  { id: 16, supplier: 'Winnie Nduta', honeyType: 'Standard Honey', qty: 23, unitPrice: 900, total: 20700, date: '2024-06-07', payment: 'Cash', bank: '', createdAt: '2024-06-07T07:35:00.000Z' },
+  { id: 17, supplier: 'Elias Ruto', honeyType: 'Premium Honey', qty: 33, unitPrice: 1200, total: 39600, date: '2024-06-18', payment: 'Bank', bank: 'Co-op Bank', createdAt: '2024-06-18T11:10:00.000Z' },
+  { id: 18, supplier: 'Doreen Kendi', honeyType: 'Standard Honey', qty: 17, unitPrice: 900, total: 15300, date: '2024-06-30', payment: 'Cash', bank: '', createdAt: '2024-06-30T08:40:00.000Z' },
+  { id: 19, supplier: 'Victor Sigei', honeyType: 'Premium Honey', qty: 32, unitPrice: 1200, total: 38400, date: '2024-07-08', payment: 'Bank', bank: 'KCB', createdAt: '2024-07-08T10:00:00.000Z' },
+  { id: 20, supplier: 'Sarah Mwikali', honeyType: 'Standard Honey', qty: 26, unitPrice: 900, total: 23400, date: '2024-07-12', payment: 'Cash', bank: '', createdAt: '2024-07-12T09:30:00.000Z' },
+  { id: 21, supplier: 'Patrick Ndegwa', honeyType: 'Premium Honey', qty: 38, unitPrice: 1200, total: 45600, date: '2024-07-22', payment: 'Bank', bank: 'Equity', createdAt: '2024-07-22T12:45:00.000Z' },
+  { id: 22, supplier: 'Joyce Adhiambo', honeyType: 'Standard Honey', qty: 16, unitPrice: 900, total: 14400, date: '2024-07-27', payment: 'Cash', bank: '', createdAt: '2024-07-27T07:50:00.000Z' }
+];
+
+const sampleTransport = [
+  { id: 1, item: 'Single', qty: 2, rate: 2000, cost: 4000, date: '2024-01-10', notes: 'Rural delivery to Naivasha' },
+  { id: 2, item: 'Mini Package', qty: 1, rate: 20, cost: 20, date: '2024-01-16', notes: 'City courier' },
+  { id: 3, item: 'Full Package', qty: 3, rate: 25, cost: 75, date: '2024-02-02', notes: 'Farm gate pickup' },
+  { id: 4, item: 'Accessories', qty: 4, rate: 30, cost: 120, date: '2024-02-11', notes: 'Spare parts delivery' },
+  { id: 5, item: 'Harvesting Kit', qty: 2, rate: 30, cost: 60, date: '2024-02-20', notes: 'Equipment transfer' },
+  { id: 6, item: 'Honey Extractor', qty: 1, rate: 100, cost: 100, date: '2024-03-03', notes: 'Machine relocation' },
+  { id: 7, item: 'Single', qty: 3, rate: 2000, cost: 6000, date: '2024-03-12', notes: 'Multiple site delivery' },
+  { id: 8, item: 'Mini Package', qty: 2, rate: 20, cost: 40, date: '2024-03-19', notes: 'Warehouse transfer' },
+  { id: 9, item: 'Full Package', qty: 4, rate: 25, cost: 100, date: '2024-03-28', notes: 'Bulk delivery' },
+  { id: 10, item: 'Accessories', qty: 3, rate: 30, cost: 90, date: '2024-04-05', notes: 'Supplier pickup' },
+  { id: 11, item: 'Harvesting Kit', qty: 1, rate: 30, cost: 30, date: '2024-04-15', notes: 'Field support' },
+  { id: 12, item: 'Honey Extractor', qty: 2, rate: 100, cost: 200, date: '2024-04-23', notes: 'Workshop delivery' },
+  { id: 13, item: 'Single', qty: 5, rate: 2000, cost: 10000, date: '2024-05-02', notes: 'Long-distance delivery' },
+  { id: 14, item: 'Mini Package', qty: 3, rate: 20, cost: 60, date: '2024-05-10', notes: 'Cross-county dispatch' },
+  { id: 15, item: 'Full Package', qty: 2, rate: 25, cost: 50, date: '2024-05-18', notes: 'Co-op collection' },
+  { id: 16, item: 'Accessories', qty: 2, rate: 30, cost: 60, date: '2024-06-05', notes: 'Replacement stock' },
+  { id: 17, item: 'Harvesting Kit', qty: 3, rate: 30, cost: 90, date: '2024-06-17', notes: 'Training site delivery' },
+  { id: 18, item: 'Honey Extractor', qty: 1, rate: 100, cost: 100, date: '2024-06-29', notes: 'Demo unit movement' }
+];
+
+const sampleTrainings = [
+  { id: 1, trainee: 'Faith Nyambura', trainer: 'Joseph Mburu', booking: 'Booked', date: '2024-01-08', amount: 12000, pkg: 'Starter' },
+  { id: 2, trainee: 'Samson Otieno', trainer: 'Catherine Langat', booking: 'Confirmed', date: '2024-01-10', amount: 15000, pkg: 'Intermediate' },
+  { id: 3, trainee: 'Vivian Chepkorir', trainer: 'Pauline Anyango', booking: 'Booked', date: '2024-01-15', amount: 13500, pkg: 'Starter' },
+  { id: 4, trainee: 'Morris Wekesa', trainer: 'Meshack Njoroge', booking: 'Confirmed', date: '2024-01-20', amount: 14000, pkg: 'Intermediate' },
+  { id: 5, trainee: 'Sharon Atieno', trainer: 'Rosemary Mumo', booking: 'Booked', date: '2024-02-02', amount: 16000, pkg: 'Advanced' },
+  { id: 6, trainee: 'David Mwangi', trainer: 'Kevin Cheruiyot', booking: 'Confirmed', date: '2024-02-08', amount: 12500, pkg: 'Starter' },
+  { id: 7, trainee: 'Linet Achieng', trainer: 'Naomi Kiarie', booking: 'Booked', date: '2024-02-14', amount: 14500, pkg: 'Intermediate' },
+  { id: 8, trainee: 'Emmanuel Kibet', trainer: 'Simon Kiplagat', booking: 'Confirmed', date: '2024-03-01', amount: 15000, pkg: 'Advanced' },
+  { id: 9, trainee: 'Miriam Wambui', trainer: 'Joseph Mburu', booking: 'Booked', date: '2024-03-09', amount: 13000, pkg: 'Starter' },
+  { id: 10, trainee: 'Isaac Omondi', trainer: 'Catherine Langat', booking: 'Confirmed', date: '2024-03-16', amount: 15500, pkg: 'Intermediate' },
+  { id: 11, trainee: 'Esther Kilonzo', trainer: 'Pauline Anyango', booking: 'Booked', date: '2024-03-22', amount: 16500, pkg: 'Advanced' },
+  { id: 12, trainee: 'George Kamau', trainer: 'Meshack Njoroge', booking: 'Confirmed', date: '2024-04-03', amount: 13800, pkg: 'Starter' },
+  { id: 13, trainee: 'Diana Naliaka', trainer: 'Rosemary Mumo', booking: 'Booked', date: '2024-04-12', amount: 14800, pkg: 'Intermediate' },
+  { id: 14, trainee: 'Nixon Barasa', trainer: 'Kevin Cheruiyot', booking: 'Confirmed', date: '2024-04-25', amount: 15200, pkg: 'Advanced' },
+  { id: 15, trainee: 'Caroline Oduor', trainer: 'Naomi Kiarie', booking: 'Booked', date: '2024-05-06', amount: 14200, pkg: 'Starter' },
+  { id: 16, trainee: 'Brian Mutiso', trainer: 'Simon Kiplagat', booking: 'Confirmed', date: '2024-05-14', amount: 15800, pkg: 'Intermediate' }
+];
+
+function assignGeneratedIds(records) {
+  return records.map((record, index) => ({
+    ...record,
+    id: index + 1
+  }));
+}
+
+function seedDatabase() {
+  const dataKeys = ['farmers', 'trainees', 'trainers', 'sales', 'honey', 'transport', 'trainings'];
+  const hasExistingData = dataKeys.some(key => DB.get(key).length > 0);
+
+  if (localStorage.getItem('nekta_seeded') === 'true' || hasExistingData) {
+    return;
+  }
+
+  const seeded = DB.set('farmers', assignGeneratedIds(sampleFarmers))
+    && DB.set('trainees', assignGeneratedIds(sampleTrainees))
+    && DB.set('trainers', assignGeneratedIds(sampleTrainers))
+    && DB.set('sales', assignGeneratedIds(sampleSales))
+    && DB.set('honey', assignGeneratedIds(sampleHoney))
+    && DB.set('transport', assignGeneratedIds(sampleTransport))
+    && DB.set('trainings', assignGeneratedIds(sampleTrainings));
+
+  if (seeded) {
+    localStorage.setItem('nekta_seeded', 'true');
+  }
+}
 
 // ═══════════════════════════════════════════════
 //  VALIDATION & UTILITIES
@@ -63,8 +237,9 @@ const Validators = {
 const Audit = {
   log: (action, type, id, oldData, newData) => {
     const logs = DB.get('auditLogs') || [];
+    const nextId = logs.length ? Math.max(...logs.map(l => Number(l.id) || 0)) + 1 : 1;
     logs.push({
-      id: logs.length + 1,
+      id: nextId,
       timestamp: new Date().toISOString(),
       action,
       type,
@@ -123,7 +298,7 @@ const Exporters = {
     link.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
-    toast(`✓ Exported ${data.length} records to CSV`);
+    toast(` Exported ${data.length} records to CSV`);
   },
   
   toPDF: async (data, title) => {
@@ -138,7 +313,7 @@ const Exporters = {
     const rows = data.map(r => cols.map(c => r[c]));
     doc.autoTable({ head: [cols], body: rows, startY: 20 });
     doc.save(`${title}_${new Date().toISOString().split('T')[0]}.pdf`);
-    toast('✓ PDF exported successfully');
+    toast(' PDF exported successfully');
   }
 };
 
@@ -209,13 +384,15 @@ function doLogout() {
 document.addEventListener('DOMContentLoaded', () => {
   // Verify localStorage is working
   if (!DB.verify()) {
-    console.warn('⚠️ localStorage may be disabled or full. Data persistence may not work.');
+    console.warn(' localStorage may be disabled or full. Data persistence may not work.');
     const loginScreen = document.getElementById('loginScreen');
     const warningDiv = document.createElement('div');
     warningDiv.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#ff9800;color:#fff;padding:12px 20px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;';
-    warningDiv.textContent = '⚠️ Storage disabled: Changes may not be saved.';
+    warningDiv.textContent = ' Storage disabled: Changes may not be saved.';
     loginScreen.appendChild(warningDiv);
   }
+
+  seedDatabase();
   
   // Setup login listeners
   ['loginUser','loginPass'].forEach(id => {
@@ -263,7 +440,7 @@ function switchTab(section, panel) {
 // ── TOAST ─────────────────────────────────────
 function toast(msg, isError = false) {
   const t = document.getElementById('toast');
-  t.textContent = (isError ? '✗ ' : '✓ ') + msg;
+  t.textContent = (isError ? ' ' : ' ') + msg;
   t.className = 'show' + (isError ? ' error' : '');
   setTimeout(() => { t.className = ''; }, 2800);
 }
@@ -305,7 +482,7 @@ function exportData() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  toast('✓ Data backup downloaded successfully!');
+  toast(' Data backup downloaded successfully!');
 }
 
 function importData() {
@@ -328,10 +505,10 @@ function importData() {
           }
         });
         
-        toast('✓ Data restored successfully! Please refresh the page.');
+        toast(' Data restored successfully! Please refresh the page.');
         setTimeout(() => location.reload(), 1500);
       } catch (e) {
-        toast('✗ Invalid backup file.', true);
+        toast(' Invalid backup file.', true);
       }
     };
     reader.readAsText(file);
@@ -541,14 +718,14 @@ function renderDashboard() {
   const totalTraining  = trainings.reduce((s, r) => s + (r.amount || 0), 0);
 
   document.getElementById('dashStats').innerHTML = `
-    <div class="stat-card"><div class="stat-label">👨‍🌾 Farmers</div><div class="stat-value">${farmers.length}</div></div>
-    <div class="stat-card"><div class="stat-label">👤 Trainees</div><div class="stat-value">${trainees.length}</div></div>
-    <div class="stat-card"><div class="stat-label">🎓 Trainers</div><div class="stat-value">${trainers.length}</div></div>
-    <div class="stat-card"><div class="stat-label">📦 Product Sales</div><div class="stat-value">Ksh ${fmt(totalSales)}</div></div>
-    <div class="stat-card"><div class="stat-label">🍯 Honey Purchased</div><div class="stat-value">Ksh ${fmt(totalHoney)}</div></div>
-    <div class="stat-card"><div class="stat-label">🚚 Transport Earnings</div><div class="stat-value">Ksh ${fmt(totalTransport)}</div></div>
-    <div class="stat-card"><div class="stat-label">💼 Training Income</div><div class="stat-value">Ksh ${fmt(totalTraining)}</div></div>
-    <div class="stat-card"><div class="stat-label">💰 Total Income</div><div class="stat-value">Ksh ${fmt(calcTotalIncome())}</div></div>
+    <div class="stat-card"><div class="stat-label"> Farmers</div><div class="stat-value">${farmers.length}</div></div>
+    <div class="stat-card"><div class="stat-label"> Trainees</div><div class="stat-value">${trainees.length}</div></div>
+    <div class="stat-card"><div class="stat-label"> Trainers</div><div class="stat-value">${trainers.length}</div></div>
+    <div class="stat-card"><div class="stat-label"> Product Sales</div><div class="stat-value">Ksh ${fmt(totalSales)}</div></div>
+    <div class="stat-card"><div class="stat-label"> Honey Purchased</div><div class="stat-value">Ksh ${fmt(totalHoney)}</div></div>
+    <div class="stat-card"><div class="stat-label"> Transport Earnings</div><div class="stat-value">Ksh ${fmt(totalTransport)}</div></div>
+    <div class="stat-card"><div class="stat-label"> Training Income</div><div class="stat-value">Ksh ${fmt(totalTraining)}</div></div>
+    <div class="stat-card"><div class="stat-label"> Total Income</div><div class="stat-value">Ksh ${fmt(calcTotalIncome())}</div></div>
   `;
 
   const recentSales = sales.slice(-5).reverse();
@@ -611,7 +788,7 @@ function addFarmer() {
   farmers.push(farmer);
   DB.set('farmers', farmers);
   Audit.log('CREATE', 'Farmer', farmer.id, null, farmer);
-  toast('✓ Farmer saved successfully!');
+  toast(' Farmer saved successfully!');
   clearFarmerForm();
   renderFarmers();
   switchTab('farmers', 'list');
@@ -675,7 +852,7 @@ function saveEditFarmer() {
   DB.set('farmers', farmers);
   Audit.log('UPDATE', 'Farmer', id, oldData, newData);
   closeModal('editFarmerModal');
-  toast('✓ Farmer updated successfully!');
+  toast(' Farmer updated successfully!');
   renderFarmers();
 }
 
@@ -719,8 +896,8 @@ function renderFarmers(searchQuery = '', page = 1) {
       <td>${r.date || '—'}</td>
       <td>${r.package ? `<span class="badge badge-blue">${r.package}</span>` : '—'}</td>
       <td>
-        <button class="btn btn-sm btn-secondary" onclick="editFarmer(${r.id})" title="Edit">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteFarmer(${r.id})" title="Delete">🗑️</button>
+        <button class="btn btn-sm btn-secondary" onclick="editFarmer(${r.id})" title="Edit farmer">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteFarmer(${r.id})" title="Delete farmer">Delete</button>
       </td>
     </tr>
   `).join('') : '<tr><td colspan="7" class="empty">No farmers found.</td></tr>';
@@ -933,7 +1110,7 @@ function addSale() {
   sales.push(sale);
   DB.set('sales', sales);
   Audit.log('CREATE', 'Sale', sale.id, null, sale);
-  toast('✓ Sale saved successfully!');
+  toast(' Sale saved successfully!');
   clearSaleForm();
   renderSales();
   switchTab('sales', 'list');
@@ -1012,8 +1189,8 @@ function renderSales(searchQuery = '', page = 1) {
       <td>${r.customer}</td><td>${r.saleType}</td><td>${r.units}</td><td>Ksh ${fmt(r.unitPrice)}</td>
       <td class="text-green">Ksh ${fmt(r.total)}</td><td>${r.date || '—'}</td>
       <td><span class="badge ${r.transport === 'Yes' ? 'badge-blue' : 'badge-green'}">${r.transport}</span></td>
-      <td><button class="btn btn-sm btn-secondary" onclick="editSale(${r.id})">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteSale(${r.id})">🗑️</button></td></tr>
+      <td><button class="btn btn-sm btn-secondary" onclick="editSale(${r.id})" title="Edit sale">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteSale(${r.id})" title="Delete sale">Delete</button></td></tr>
   `).join('') : '<tr><td colspan="9" class="empty">No sales found.</td></tr>';
   if (result.totalPages > 1) {
     document.getElementById('salesPagination').innerHTML = Pagination.renderControls(page, result.totalPages, 'changeSalesPage');
@@ -1072,7 +1249,7 @@ function addHoney() {
   honey.push(honeyRecord);
   DB.set('honey', honey);
   Audit.log('CREATE', 'HoneyPurchase', honeyRecord.id, null, honeyRecord);
-  toast('✓ Honey purchase saved successfully!');
+  toast(' Honey purchase saved successfully!');
   clearHoneyForm();
   renderHoney();
   switchTab('honey', 'list');
@@ -1130,7 +1307,7 @@ function saveEditHoney() {
   DB.set('honey', DB.get('honey').map(r => r.id !== id ? r : newData));
   Audit.log('UPDATE', 'HoneyPurchase', id, oldData, newData);
   closeModal('editHoneyModal');
-  toast('✓ Honey purchase updated successfully!');
+  toast(' Honey purchase updated successfully!');
   renderHoney();
 }
 
@@ -1158,8 +1335,8 @@ function renderHoney(searchQuery = '', page = 1) {
       <td>${r.supplier}</td><td>${r.honeyType || r.type}</td><td>${r.qty} KG</td>
       <td>Ksh ${fmt(r.unitPrice)}</td><td class="text-green">Ksh ${fmt(r.total)}</td>
       <td>${r.date || '—'}</td><td><span class="badge badge-blue">${r.payment}</span></td>
-      <td><button class="btn btn-sm btn-secondary" onclick="editHoney(${r.id})">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteHoney(${r.id})">🗑️</button></td></tr>
+      <td><button class="btn btn-sm btn-secondary" onclick="editHoney(${r.id})" title="Edit honey purchase">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteHoney(${r.id})" title="Delete honey purchase">Delete</button></td></tr>
   `).join('') : '<tr><td colspan="9" class="empty">No honey purchases found.</td></tr>';
   if (result.totalPages > 1) {
     document.getElementById('honeyPagination').innerHTML = Pagination.renderControls(page, result.totalPages, 'changeHoneyPage');

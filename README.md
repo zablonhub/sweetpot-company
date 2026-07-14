@@ -39,5 +39,5 @@ nekta-bee/
 ## Notes
 - Fields marked with a red * are required
 - Sub-totals on sales, honey, and transport are auto-calculated
-- Use the ✏️ button to edit any record, 🗑️ to delete
+- Use the  button to edit any record,  to delete
 - A confirmation dialog appears before any deletion

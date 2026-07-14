@@ -11,7 +11,7 @@
 <!-- ════ LOGIN ════ -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-bee">🐝</div>
+    <div class="login-bee"></div>
     <h1>SweetPot Company</h1>
     <p>Management System </p>
     <input type="text" id="loginUser" placeholder="Username">
@@ -27,10 +27,10 @@
 
   <!-- Top Bar -->
   <div class="topbar">
-    <div class="topbar-logo">🐝SweetPot Management System </div>
+    <div class="topbar-logo">SweetPot Management System </div>
     <div class="topbar-income">Total Income: <strong id="topIncome">Ksh 0.00</strong></div>
-    <button class="btn-logout" style="font-size:11px; padding: 6px 12px;" onclick="exportData()" title="Download data backup">💾 Backup</button>
-    <button class="btn-logout" style="font-size:11px; padding: 6px 12px;" onclick="importData()" title="Restore from backup">📂 Restore</button>
+    <button class="btn-logout" style="font-size:11px; padding: 6px 12px;" onclick="exportData()" title="Download data backup"> Backup</button>
+    <button class="btn-logout" style="font-size:11px; padding: 6px 12px;" onclick="importData()" title="Restore from backup"> Restore</button>
     <button class="btn-logout" onclick="doLogout()">Log Out</button>
   </div>
 
@@ -58,26 +58,26 @@
 
       <!-- ── DASHBOARD ── -->
       <div id="page-dashboard">
-        <div class="page-title">Welcome to SweetPot 🐝</div>
+        <div class="page-title">Welcome to SweetPot </div>
         <div class="page-sub">SweetPot Company — Management Overview</div>
         <div class="stat-grid" id="dashStats"></div>
         <div class="grid2">
           <div class="chart-container">
-            <div class="chart-title">📊 Income Sources</div>
+            <div class="chart-title"> Income Sources</div>
             <canvas id="incomeChart"></canvas>
           </div>
           <div class="chart-container">
-            <div class="chart-title">👥 Organization Overview</div>
+            <div class="chart-title"> Organization Overview</div>
             <canvas id="orgChart"></canvas>
           </div>
         </div>
         <div class="grid2 mt16">
           <div class="card">
-            <div class="card-header">📈 Recent Sales</div>
+            <div class="card-header"> Recent Sales</div>
             <div id="recentSales" style="padding:20px;"></div>
           </div>
           <div class="card">
-            <div class="card-header">🍯 Recent Honey Purchases</div>
+            <div class="card-header"> Recent Honey Purchases</div>
             <div id="recentHoney" style="padding:20px;"></div>
           </div>
         </div>
@@ -97,8 +97,8 @@
               <input type="text" id="farmerSearch" placeholder="Search by name, phone, or city..." onkeyup="searchAndRenderFarmers(this.value)">
             </div>
             <div class="search-actions">
-              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('farmers'), 'Farmers_List')">📥 CSV</button>
-              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('farmers'), 'Farmers List')">📄 PDF</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('farmers'), 'Farmers_List')"> CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('farmers'), 'Farmers List')"> PDF</button>
             </div>
           </div>
           <div class="card">
@@ -219,8 +219,8 @@
               <input type="text" id="salesSearch" placeholder="Search by customer or product type..." onkeyup="searchAndRenderSales(this.value)">
             </div>
             <div class="search-actions">
-              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('sales'), 'Sales_Report')">📥 CSV</button>
-              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('sales'), 'Sales Report')">📄 PDF</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('sales'), 'Sales_Report')"> CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('sales'), 'Sales Report')"> PDF</button>
             </div>
           </div>
           <div class="card">
@@ -280,8 +280,8 @@
               <input type="text" id="honeySearch" placeholder="Search by supplier or honey type..." onkeyup="searchAndRenderHoney(this.value)">
             </div>
             <div class="search-actions">
-              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('honey'), 'Honey_Purchases')">📥 CSV</button>
-              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('honey'), 'Honey Purchases')">📄 PDF</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toCSV(DB.get('honey'), 'Honey_Purchases')"> CSV</button>
+              <button class="btn btn-primary btn-sm" onclick="Exporters.toPDF(DB.get('honey'), 'Honey Purchases')"> PDF</button>
             </div>
           </div>
           <div class="card">
@@ -411,11 +411,11 @@
         <div class="page-sub">Company income and activity reports</div>
         <div class="grid2 mb16">
           <div class="chart-container">
-            <div class="chart-title">💰 Monthly Income Trend</div>
+            <div class="chart-title"> Monthly Income Trend</div>
             <canvas id="monthlyIncomeChart"></canvas>
           </div>
           <div class="chart-container">
-            <div class="chart-title">📦 Sales by Category</div>
+            <div class="chart-title"> Sales by Category</div>
             <canvas id="salesCategoryChart"></canvas>
           </div>
         </div>
@@ -429,14 +429,14 @@
         </div>
         <div class="grid2">
           <div class="card">
-            <div class="card-header">👨‍🌾 Company Farmers Report</div>
+            <div class="card-header"> Company Farmers Report</div>
             <table>
               <thead><tr><th>Farmer ID</th><th>Name</th><th>City</th><th>Phone</th></tr></thead>
               <tbody id="farmerReportTbody"></tbody>
             </table>
           </div>
           <div class="card">
-            <div class="card-header">📊 Products Sales Report</div>
+            <div class="card-header"> Products Sales Report</div>
             <table>
               <thead><tr><th>Sale ID</th><th>Sold To</th><th>Type</th><th>Units</th><th>Total</th></tr></thead>
               <tbody id="salesReportTbody"></tbody>
@@ -455,7 +455,7 @@
 <!-- ════ CONFIRM DELETE MODAL ════ -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal" style="width:380px;">
-    <div class="modal-header"> Confirm Delete <button class="modal-close" onclick="closeModal('confirmModal')">✕</button></div>
+    <div class="modal-header"> Confirm Delete <button class="modal-close" onclick="closeModal('confirmModal')"></button></div>
     <div class="modal-body">
       <div class="confirm-msg" id="confirmMsg">Are you sure you want to delete this record?</div>
       <div class="confirm-sub">This action cannot be undone.</div>
@@ -470,7 +470,7 @@
 <!-- ════ EDIT FARMER MODAL ════ -->
 <div class="modal-overlay" id="editFarmerModal">
   <div class="modal">
-    <div class="modal-header"> Edit Farmer <button class="modal-close" onclick="closeModal('editFarmerModal')">✕</button></div>
+    <div class="modal-header"> Edit Farmer <button class="modal-close" onclick="closeModal('editFarmerModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="ef_id">
       <div class="form-grid" style="padding:0;">
@@ -503,7 +503,7 @@
 <!-- ════ EDIT TRAINEE MODAL ════ -->
 <div class="modal-overlay" id="editTraineeModal">
   <div class="modal">
-    <div class="modal-header"> Edit Trainee <button class="modal-close" onclick="closeModal('editTraineeModal')">✕</button></div>
+    <div class="modal-header"> Edit Trainee <button class="modal-close" onclick="closeModal('editTraineeModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="etr_id">
       <div class="form-grid" style="padding:0;">
@@ -523,7 +523,7 @@
 <!-- ════ EDIT TRAINER MODAL ════ -->
 <div class="modal-overlay" id="editTrainerModal">
   <div class="modal">
-    <div class="modal-header"> Edit Trainer <button class="modal-close" onclick="closeModal('editTrainerModal')">✕</button></div>
+    <div class="modal-header"> Edit Trainer <button class="modal-close" onclick="closeModal('editTrainerModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="etrnr_id">
       <div class="form-grid" style="padding:0;">
@@ -542,7 +542,7 @@
 <!-- ════ EDIT SALE MODAL ════ -->
 <div class="modal-overlay" id="editSaleModal">
   <div class="modal">
-    <div class="modal-header">Edit Sale <button class="modal-close" onclick="closeModal('editSaleModal')">✕</button></div>
+    <div class="modal-header">Edit Sale <button class="modal-close" onclick="closeModal('editSaleModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="es_id">
       <div class="form-grid" style="padding:0;">
@@ -576,7 +576,7 @@
 <!-- ════ EDIT HONEY MODAL ════ -->
 <div class="modal-overlay" id="editHoneyModal">
   <div class="modal">
-    <div class="modal-header"> Edit Honey Purchase <button class="modal-close" onclick="closeModal('editHoneyModal')">✕</button></div>
+    <div class="modal-header"> Edit Honey Purchase <button class="modal-close" onclick="closeModal('editHoneyModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="eh_id">
       <div class="form-grid" style="padding:0;">
@@ -608,7 +608,7 @@
 <!-- ════ EDIT TRANSPORT MODAL ════ -->
 <div class="modal-overlay" id="editTransportModal">
   <div class="modal">
-    <div class="modal-header"> Edit Transport <button class="modal-close" onclick="closeModal('editTransportModal')">✕</button></div>
+    <div class="modal-header"> Edit Transport <button class="modal-close" onclick="closeModal('editTransportModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="etp_id">
       <div class="form-grid" style="padding:0;">
@@ -639,7 +639,7 @@
 <!-- ════ EDIT TRAINING MODAL ════ -->
 <div class="modal-overlay" id="editTrainingModal">
   <div class="modal">
-    <div class="modal-header"> Edit Training Session <button class="modal-close" onclick="closeModal('editTrainingModal')">✕</button></div>
+    <div class="modal-header"> Edit Training Session <button class="modal-close" onclick="closeModal('editTrainingModal')"></button></div>
     <div class="modal-body">
       <input type="hidden" id="etng_id">
       <div class="form-grid" style="padding:0;">

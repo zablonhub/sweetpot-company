@@ -1,11 +1,11 @@
 # SweetPot Management System - Features & User Guide
 
-## 🎯 Overview
+##  Overview
 SweetPot is a comprehensive management system for beekeeping companies, designed to track farmers, trainees, trainers, product sales, honey purchases, transportation, and training sessions. All data is stored securely in browser localStorage.
 
 ---
 
-## ✨ **Core Features**
+##  **Core Features**
 
 ### 1. **Authentication**
 - Simple login system with Username/Password (default: Username / Password)
@@ -25,13 +25,13 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
   - Total Company Income
 
 - **Interactive Charts**:
-  - 📊 **Income Sources** - Doughnut chart showing revenue breakdown
-  - 👥 **Organization Overview** - Bar chart of personnel counts
-  - 📈 **Recent Sales** - Table of last 5 sales
-  - 🍯 **Recent Honey Purchases** - Table of last 5 purchases
+  -  **Income Sources** - Doughnut chart showing revenue breakdown
+  -  **Organization Overview** - Bar chart of personnel counts
+  -  **Recent Sales** - Table of last 5 sales
+  -  **Recent Honey Purchases** - Table of last 5 purchases
 
 ### 3. **Farmer Management**
-- ✅ **Add Farmers** with:
+-  **Add Farmers** with:
   - First & Last Name (required)
   - Email, Business Phone, Mobile Phone (with validation)
   - City/Town, Street Address
@@ -39,15 +39,15 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
   - Registration Date
   - Custom Notes
 
-- 🔍 **Search Farmers** by:
+-  **Search Farmers** by:
   - Name (first or last)
   - Phone number
   - City/Town
 
-- ✏️ **Edit Farmer Records** - Update any field
-- 🗑️ **Delete Farmers** - With confirmation dialog
-- 📄 **Export to CSV** - Download farmer list
-- 📋 **Pagination** - View 10 farmers per page
+-  **Edit Farmer Records** - Update any field
+-  **Delete Farmers** - With confirmation dialog
+-  **Export to CSV** - Download farmer list
+-  **Pagination** - View 10 farmers per page
 
 ### 4. **Product Sales Management**
 - **Record Sales** of:
@@ -61,12 +61,12 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
   - Total auto-calculates: Units × Unit Price
   - Optional transportation tracking
 
-- 🔍 **Search Sales** by:
+-  **Search Sales** by:
   - Customer name
   - Product type
 
-- 📥 **Export to CSV/PDF** - Download sales reports
-- 📊 **Pagination** - 10 sales per page
+-  **Export to CSV/PDF** - Download sales reports
+-  **Pagination** - 10 sales per page
 
 ### 5. **Honey Purchase Tracking**
 - **Record Honey Purchases** from farmers:
@@ -77,12 +77,12 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
   - Auto-calculated total cost
   - Payment method (Cash/M-Pesa/Bank Transfer)
 
-- 🔍 **Search Purchases** by:
+-  **Search Purchases** by:
   - Supplier name
   - Honey type
 
-- 📥 **Export Reports** - CSV and PDF formats
-- 📊 **Analytics** - Track spending by supplier
+-  **Export Reports** - CSV and PDF formats
+-  **Analytics** - Track spending by supplier
 
 ### 6. **Trainee Management**
 - Enroll trainees in beekeeping programs
@@ -108,25 +108,25 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 - Export training reports
 
 ### 10. **Reports & Analytics**
-- 📈 **Monthly Income Trend** - Line chart of income over time
-- 📦 **Sales by Category** - Pie chart of sales breakdown
-- 💰 **Monthly Income Report** - Detailed table showing:
+-  **Monthly Income Trend** - Line chart of income over time
+-  **Sales by Category** - Pie chart of sales breakdown
+-  **Monthly Income Report** - Detailed table showing:
   - Product Sales
   - Training Income
   - Transport Earnings
   - Honey Purchases
   - Total Monthly Income
 
-- 👨‍🌾 **Farmer Directory** - Complete farmer list with contact info
-- 📊 **Sales Report** - All recorded sales with totals
-- 🔄 **Audit Trail** - Track all changes to records
+-  **Farmer Directory** - Complete farmer list with contact info
+-  **Sales Report** - All recorded sales with totals
+-  **Audit Trail** - Track all changes to records
 
 ---
 
-## 🛡️ **Data Management**
+##  **Data Management**
 
 ### Validation Features
-✅ **Form Validation**:
+ **Form Validation**:
 - Required fields enforcement
 - Email format validation
 - Phone number validation (10-digit Kenya format)
@@ -135,60 +135,60 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 - Date validation
 
 ### Data Persistence
-✅ **Automatic Saving**:
+ **Automatic Saving**:
 - All changes saved immediately to browser localStorage
 - Data persists across sessions
 - No internet required
 - Backup system to prevent data loss
 
 ### Backup & Restore
-- 💾 **Download Backup** - Export all data as JSON file
-- 📂 **Restore from Backup** - Import previously saved data
+-  **Download Backup** - Export all data as JSON file
+-  **Restore from Backup** - Import previously saved data
 - Located in top navigation bar
 
 ---
 
-## 🎨 **User Experience Features**
+##  **User Experience Features**
 
 ### Search & Filter
-- 🔍 Real-time search across all sections
+-  Real-time search across all sections
 - Multiple search criteria per section
 - Filter results instantly
 
 ### Pagination
-- 📄 View 10 records per page
+-  View 10 records per page
 - Navigate using Previous/Next buttons
 - Page indicators showing current position
 
 ### Notifications
-- ✅ Success messages (green toast) for completed actions
-- ❌ Error messages (red toast) for validation failures
-- ⚠️ Warning messages for important alerts
+-  Success messages (green toast) for completed actions
+-  Error messages (red toast) for validation failures
+-  Warning messages for important alerts
 
 ### Responsive Design
-- 📱 Mobile-friendly interface
+-  Mobile-friendly interface
 - Touch-optimized buttons
 - Scales to tablet and desktop
 - Professional UI with honey/amber theme
 
 ### Charts & Visualizations
-- 📊 Interactive Chart.js visualizations
+-  Interactive Chart.js visualizations
 - Real-time data updates
 - Professional styling
 
 ---
 
-## 💼 **Advanced Features**
+##  **Advanced Features**
 
 ### Audit Trail
-- 📋 Track all record changes
+-  Track all record changes
 - View history of edits and deletions
 - Timestamp and user tracking
 - Useful for compliance and auditing
 
 ### Export Functionality
-- 📥 **CSV Export** - Compatible with Excel
-- 📄 **PDF Export** - Professional reports
+-  **CSV Export** - Compatible with Excel
+-  **PDF Export** - Professional reports
 - Works for all major sections
 - Auto-generated filenames with dates
 
@@ -198,14 +198,14 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 - Session timeout support
 
 ### Data Integrity
-- ✅ Input validation at every step
+-  Input validation at every step
 - localStorage error handling
 - Data corruption prevention
 - Automatic backups
 
 ---
 
-## 🚀 **Getting Started**
+##  **Getting Started**
 
 ### First Time Users
 1. Open `index.html` in your browser
@@ -230,24 +230,24 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 
 ### Exporting Data
 1. Navigate to any list
-2. Click "📥 CSV" to download spreadsheet
-3. Click "📄 PDF" for professional reports
+2. Click " CSV" to download spreadsheet
+3. Click " PDF" for professional reports
 4. Files auto-save with date stamp
 
 ### Backing Up Data
-1. Click "💾 Backup" in top navigation
+1. Click " Backup" in top navigation
 2. File downloads as `SweetPot_Backup_[DATE].json`
 3. Store safely for recovery
 
 ### Restoring Data
-1. Click "📂 Restore" in top navigation
+1. Click " Restore" in top navigation
 2. Select previously saved backup file
 3. All data restores automatically
 4. Page refreshes to show updated data
 
 ---
 
-## 📊 **Data Fields**
+##  **Data Fields**
 
 ### Farmers
 - ID, First Name, Last Name, Email, Business Phone, Mobile Phone
@@ -275,7 +275,7 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 
 ---
 
-## 🔧 **Technical Details**
+##  **Technical Details**
 
 ### Storage
 - Browser localStorage for all data
@@ -303,13 +303,13 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 
 ---
 
-## 🐛 **Troubleshooting**
+##  **Troubleshooting**
 
 ### Data Not Saving
-- ⚠️ Check if browser storage is enabled
+-  Check if browser storage is enabled
 - Check browser console for errors
 - Try refreshing the page
-- Use "💾 Backup" to manually export
+- Use " Backup" to manually export
 
 ### Can't Login
 - Verify username and password are exact
@@ -331,7 +331,7 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 
 ---
 
-## 📱 **Tips & Best Practices**
+##  **Tips & Best Practices**
 
 1. **Regular Backups** - Download backup weekly
 2. **Consistent Data** - Use same spelling for names
@@ -344,7 +344,7 @@ SweetPot is a comprehensive management system for beekeeping companies, designed
 
 ---
 
-## 📞 **Support**
+##  **Support**
 
 For issues or feature requests:
 - Check browser console (F12)
@@ -355,7 +355,7 @@ For issues or feature requests:
 
 ---
 
-## 📄 **License & Credits**
+##  **License & Credits**
 
 SweetPot Management System v2.0
 Built with HTML5, CSS3, JavaScript, and Chart.js

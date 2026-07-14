@@ -725,7 +725,7 @@ textarea {
 }
 
 .search-bar::before {
-  content: '🔍';
+  content: '';
   position: absolute;
   left: 12px;
   top: 50%;
